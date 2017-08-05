@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.android.percent.support.PercentFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/pfl_container"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@drawable/state_movie"
+    android:focusable="true">
+
+    <com.zhy.android.percent.support.PercentRelativeLayout
+        android:id="@+id/pll_larger"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        app:layout_heightPercent="100%h"
+        app:layout_widthPercent="150%h">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/iv_poster"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/tv_movie_nav"
+            android:scaleType="centerCrop"
+            android:src="@color/co_ffffff" />
+
+        <com.yan.tvprojectutils.MarqueeText
+            android:id="@+id/tv_movie_nav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:layout_marginBottom="6dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="6dp"
+            android:textColor="@color/state_movie_nav"
+            android:textSize="20sp" />
+    </com.zhy.android.percent.support.PercentRelativeLayout>
+
+</com.zhy.android.percent.support.PercentFrameLayout>
