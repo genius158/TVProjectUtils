@@ -1,4 +1,4 @@
- # TVProjectUtils 
+ # TVProjectUtils (以后再遇到tv项目的时候，再有问题，也会继续更新)
  
  ###### 外包，难免碰到tv的项目，以下是个人在项目中遇到问题后，给出的三个类
  ### 1.[FocusRecyclerView](tvprojectutils/src/main/java/com/yan/tvprojectutils/FocusRecyclerView.java)
