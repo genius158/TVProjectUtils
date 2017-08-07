@@ -39,7 +39,7 @@ public class FocusRecyclerView extends RecyclerView {
      * what is the effect ?
      * <p>
      * for example if the orientation in layoutManager is horizontal
-     * when the recyclerView scroll to end the focus could be out of recyclerView
+     * when the recyclerView scroll to end that the focus could be out of recyclerView
      * just effect the direction that load more able to trigger
      */
     private boolean isAbleFocusOut = true;
@@ -58,8 +58,7 @@ public class FocusRecyclerView extends RecyclerView {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        return isMoving = (ev.getAction() == MotionEvent.ACTION_MOVE)
-                || super.dispatchTouchEvent(ev);
+        return isMoving = (ev.getAction() == MotionEvent.ACTION_MOVE) || super.dispatchTouchEvent(ev);
     }
 
     @Override
