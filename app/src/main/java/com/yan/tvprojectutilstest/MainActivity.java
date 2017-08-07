@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
                 rvData2.setVisibility(View.GONE);
             }
         });
+
     }
 
     private void addData() {
@@ -135,4 +136,5 @@ public class MainActivity extends AppCompatActivity {
             }
         }, 400);
     }
+
 }
