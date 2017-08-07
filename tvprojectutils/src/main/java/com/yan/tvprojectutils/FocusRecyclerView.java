@@ -9,6 +9,7 @@ import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.FocusFinder;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -32,6 +33,15 @@ public class FocusRecyclerView extends RecyclerView {
     private boolean needGetLeftView;
     private boolean needGetRightView;
 
+    /**
+     * isAbleFocusOut = true
+     * <p>
+     * what is the effect ?
+     * <p>
+     * for example if the orientation in layoutManager is horizontal
+     * when the recyclerView scroll to end the focus could be out of recyclerView
+     * just effect the direction that load more able to trigger
+     */
     private boolean isAbleFocusOut = true;
 
     public FocusRecyclerView(Context context) {
@@ -54,6 +64,13 @@ public class FocusRecyclerView extends RecyclerView {
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            resetValue();
+        } else {
+            isActionDown = false;
+            return true;
+        }
+
         int layoutDirection = getCurrentLayoutDirection();
 
         LayoutParams layoutParams = (LayoutParams) this.getChildAt(0).getLayoutParams();
@@ -65,17 +82,11 @@ public class FocusRecyclerView extends RecyclerView {
             switch (event.getKeyCode()) {
                 case KeyEvent.KEYCODE_DPAD_DOWN:
                     keyEventDown = true;
-                    keyEventUp = false;
                     View downView = FocusFinder.getInstance().findNextFocus(this, focusView, View.FOCUS_DOWN);
                     if (layoutDirection == OrientationHelper.HORIZONTAL || (isAbleFocusOut && downView == null && isRecyclerViewToBottom())) {
                         break;
                     }
-                    if (event.getAction() == KeyEvent.ACTION_UP) {
-                        isActionDown = false;
-                        return true;
-                    } else {
-                        needGetDownView = false;
-                        isActionDown = true;
+                    if (event.getAction() == KeyEvent.ACTION_DOWN) {
                         if (downView != null) {
                             downView.requestFocusFromTouch();
                             downView.requestFocus();
@@ -90,17 +101,12 @@ public class FocusRecyclerView extends RecyclerView {
                     }
                 case KeyEvent.KEYCODE_DPAD_UP:
                     keyEventUp = true;
-                    keyEventDown = false;
-                    if (event.getAction() == KeyEvent.ACTION_UP) {
-                        isActionDown = false;
-                        return true;
-                    } else {
+                    View upView = FocusFinder.getInstance().findNextFocus(this, focusView, View.FOCUS_UP);
+                    if (layoutDirection == OrientationHelper.HORIZONTAL || (upView == null && isRecyclerViewToTop())) {
+                        break;
+                    }
+                    if (event.getAction() == KeyEvent.ACTION_DOWN) {
                         isActionDown = true;
-                        needGetUpView = false;
-                        View upView = FocusFinder.getInstance().findNextFocus(this, focusView, View.FOCUS_UP);
-                        if (layoutDirection == OrientationHelper.HORIZONTAL || (upView == null && isRecyclerViewToTop())) {
-                            break;
-                        }
                         if (upView != null) {
                             upView.requestFocusFromTouch();
                             upView.requestFocus();
@@ -115,17 +121,11 @@ public class FocusRecyclerView extends RecyclerView {
                     }
                 case KeyEvent.KEYCODE_DPAD_RIGHT:
                     keyEventRight = true;
-                    keyEventLeft = false;
-                    if (event.getAction() == KeyEvent.ACTION_UP) {
-                        isActionDown = false;
-                        return true;
-                    } else {
-                        needGetRightView = false;
-                        isActionDown = true;
-                        View rightView = FocusFinder.getInstance().findNextFocus(this, focusView, View.FOCUS_RIGHT);
-                        if (layoutDirection == OrientationHelper.VERTICAL || (isAbleFocusOut && rightView == null && isRecyclerViewToRight())) {
-                            break;
-                        }
+                    View rightView = FocusFinder.getInstance().findNextFocus(this, focusView, View.FOCUS_RIGHT);
+                    if (layoutDirection == OrientationHelper.VERTICAL || (isAbleFocusOut && rightView == null && isRecyclerViewToRight())) {
+                        break;
+                    }
+                    if (event.getAction() == KeyEvent.ACTION_DOWN) {
                         if (rightView != null) {
                             rightView.requestFocusFromTouch();
                             rightView.requestFocus();
@@ -139,18 +139,12 @@ public class FocusRecyclerView extends RecyclerView {
                         }
                     }
                 case KeyEvent.KEYCODE_DPAD_LEFT:
-                    keyEventRight = false;
                     keyEventLeft = true;
                     View leftView = FocusFinder.getInstance().findNextFocus(this, focusView, View.FOCUS_LEFT);
                     if (layoutDirection == OrientationHelper.VERTICAL || (leftView == null && isRecyclerViewToLeft())) {
                         break;
                     }
-                    if (event.getAction() == KeyEvent.ACTION_UP) {
-                        isActionDown = false;
-                        return true;
-                    } else {
-                        needGetLeftView = false;
-                        isActionDown = true;
+                    if (event.getAction() == KeyEvent.ACTION_DOWN) {
                         if (leftView != null) {
                             leftView.requestFocusFromTouch();
                             leftView.requestFocus();
@@ -169,6 +163,18 @@ public class FocusRecyclerView extends RecyclerView {
         return super.dispatchKeyEvent(event);
     }
 
+    private void resetValue() {
+        keyEventDown = false;
+        keyEventUp = false;
+        keyEventLeft = false;
+        keyEventRight = false;
+        isActionDown = true;
+
+        needGetDownView = false;
+        needGetUpView = false;
+        needGetLeftView = false;
+        needGetRightView = false;
+    }
 
     @Override
     public void onScrolled(int dx, int dy) {
@@ -256,7 +262,7 @@ public class FocusRecyclerView extends RecyclerView {
 
             View firstChild = this.getChildAt(0);
             LayoutParams layoutParams = (LayoutParams) firstChild.getLayoutParams();
-            firstChildTop = firstChild.getTop() - layoutParams.topMargin - getRecyclerViewItemTopInset(layoutParams) - this.getPaddingTop();
+            firstChildTop = firstChild.getTop() - layoutParams.topMargin - getRecyclerViewItemInset(layoutParams, 1) - this.getPaddingTop();
         }
         if (manager instanceof LinearLayoutManager) {
             LinearLayoutManager layoutManager = (LinearLayoutManager) manager;
@@ -271,18 +277,6 @@ public class FocusRecyclerView extends RecyclerView {
             }
         }
         return false;
-    }
-
-    private int getRecyclerViewItemTopInset(LayoutParams layoutParams) {
-        try {
-            Field field = LayoutParams.class.getDeclaredField("mDecorInsets");
-            field.setAccessible(true);
-            Rect decorInsets = (Rect) field.get(layoutParams);
-            return decorInsets.top;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return 0;
     }
 
     public boolean isRecyclerViewToBottom() {
@@ -341,7 +335,7 @@ public class FocusRecyclerView extends RecyclerView {
 
             View firstChild = this.getChildAt(0);
             LayoutParams layoutParams = (LayoutParams) firstChild.getLayoutParams();
-            firstChildLeft = firstChild.getLeft() - layoutParams.leftMargin - getRecyclerViewItemLeftInset(layoutParams) - this.getPaddingLeft();
+            firstChildLeft = firstChild.getLeft() - layoutParams.leftMargin - getRecyclerViewItemInset(layoutParams, 2) - this.getPaddingLeft();
         }
         if (manager instanceof LinearLayoutManager) {
             LinearLayoutManager layoutManager = (LinearLayoutManager) manager;
@@ -356,18 +350,6 @@ public class FocusRecyclerView extends RecyclerView {
             }
         }
         return false;
-    }
-
-    private int getRecyclerViewItemLeftInset(LayoutParams layoutParams) {
-        try {
-            Field field = LayoutParams.class.getDeclaredField("mDecorInsets");
-            field.setAccessible(true);
-            Rect decorInsets = (Rect) field.get(layoutParams);
-            return decorInsets.left;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return 0;
     }
 
     public boolean isRecyclerViewToRight() {
@@ -403,4 +385,21 @@ public class FocusRecyclerView extends RecyclerView {
         }
         return false;
     }
+
+    private int getRecyclerViewItemInset(LayoutParams layoutParams, int type) {
+        try {
+            Field field = LayoutParams.class.getDeclaredField("mDecorInsets");
+            field.setAccessible(true);
+            Rect decorInsets = (Rect) field.get(layoutParams);
+            if (type == 1) {
+                return decorInsets.top;
+            } else if (type == 2) {
+                return decorInsets.left;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
 }

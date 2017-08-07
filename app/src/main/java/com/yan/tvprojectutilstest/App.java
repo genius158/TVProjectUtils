@@ -12,6 +12,6 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        DensityHelper.getInstance().activate(getApplicationContext(), 750);
+        DensityHelper.activate(getApplicationContext(), 750);
     }
 }

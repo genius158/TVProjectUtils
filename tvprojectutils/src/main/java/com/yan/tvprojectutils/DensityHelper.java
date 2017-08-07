@@ -1,11 +1,8 @@
 package com.yan.tvprojectutils;
 
 import android.content.Context;
-import android.graphics.Point;
-import android.os.Build;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
-import android.view.Display;
 import android.view.WindowManager;
 
 /**
@@ -13,22 +10,10 @@ import android.view.WindowManager;
  */
 
 public class DensityHelper {
-    private static DensityHelper densityHelper;
-
-    public static DensityHelper getInstance() {
-        if (densityHelper == null) {
-            synchronized (DensityHelper.class) {
-                if (densityHelper == null) {
-                    densityHelper = new DensityHelper();
-                }
-            }
-        }
-        return densityHelper;
-    }
+    private final static int CONT_VALUE = 72;
 
     private DensityHelper() {
     }
-
 
     /**
      * 重新计算displayMetrics.xhdpi, 使单位pt重定义为设计稿的相对长度
@@ -40,7 +25,7 @@ public class DensityHelper {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics dm = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(dm);
-        context.getResources().getDisplayMetrics().xdpi = dm.widthPixels / designWidth * 72f;
+        context.getResources().getDisplayMetrics().xdpi = dm.widthPixels / designWidth * CONT_VALUE;
     }
 
     /**
@@ -74,18 +59,20 @@ public class DensityHelper {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PT, value, context.getResources().getDisplayMetrics());
     }
 
-
     /**
      * 激活本方案
+     * <p>
+     * the method may not work if you just call in application
+     * than you can call it in your base activity
      */
-    public void activate(Context context, float designWidth) {
+    public static void activate(Context context, float designWidth) {
         resetDensity(context, designWidth);
     }
 
     /**
      * 恢复系统原生方案
      */
-    public void inactivate(Context context) {
+    public static void inactivate(Context context) {
         restoreDensity(context);
     }
 

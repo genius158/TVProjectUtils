@@ -144,7 +144,7 @@ public class MarqueeText extends AppCompatTextView implements Runnable {
             i++;
         }
         String tempStr = content.substring(0, i);
-        for (int j = 0; getTextWidth(tempStr, tempStr.length()) > getWidth(); ++j) {
+        for (int j = 0; j <= i && getTextWidth(tempStr, tempStr.length()) > getWidth(); ++j) {
             tempStr = content.substring(0, i - j) + textEndStyle;
         }
         return tempStr;
