@@ -5,7 +5,7 @@ publish {
     userOrg = 'yan157'
     groupId = 'com.yan'
     artifactId = 'tvprojectutils'
-    publishVersion = '1.5.6'
+    publishVersion = '1.0.0'
     website = 'https://github.com/genius158/TVProjectUtils'
 }
 
