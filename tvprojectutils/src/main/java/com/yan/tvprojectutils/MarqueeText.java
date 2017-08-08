@@ -83,6 +83,7 @@ public class MarqueeText extends AppCompatTextView implements Runnable {
             stopScroll();
             setSelfText(content);
             startScroll();
+            return;
         }
         setSelfText(content);
     }
