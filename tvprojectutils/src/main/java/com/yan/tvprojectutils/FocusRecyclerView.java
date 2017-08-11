@@ -35,7 +35,7 @@ public class FocusRecyclerView extends RecyclerView {
      * when the recyclerView scroll to end that the focus could be out of recyclerView
      * just effect the direction that load more able to trigger
      */
-    private boolean isFocusOutAble = false;
+    private boolean isFocusOutAble = true;
 
     public FocusRecyclerView(Context context) {
         this(context, null);
@@ -47,11 +47,6 @@ public class FocusRecyclerView extends RecyclerView {
 
     public FocusRecyclerView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-    }
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        return ev.getAction() == MotionEvent.ACTION_MOVE || super.dispatchTouchEvent(ev);
     }
 
     @Override
