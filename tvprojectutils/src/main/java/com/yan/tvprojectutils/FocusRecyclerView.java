@@ -21,13 +21,6 @@ import java.lang.reflect.Field;
  * Created by yan on 2017/8/4.
  */
 public class FocusRecyclerView extends RecyclerView {
-    private boolean keyEventDown;
-    private boolean keyEventUp;
-    private boolean keyEventLeft;
-    private boolean keyEventRight;
-    private boolean isActionDown;
-    private boolean isMoving;
-
     private boolean needGetDownView;
     private boolean needGetUpView;
     private boolean needGetLeftView;
@@ -42,7 +35,7 @@ public class FocusRecyclerView extends RecyclerView {
      * when the recyclerView scroll to end that the focus could be out of recyclerView
      * just effect the direction that load more able to trigger
      */
-    private boolean isFocusOutAble = true;
+    private boolean isFocusOutAble = false;
 
     public FocusRecyclerView(Context context) {
         this(context, null);
@@ -58,7 +51,7 @@ public class FocusRecyclerView extends RecyclerView {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        return isMoving = (ev.getAction() == MotionEvent.ACTION_MOVE) || super.dispatchTouchEvent(ev);
+        return ev.getAction() == MotionEvent.ACTION_MOVE || super.dispatchTouchEvent(ev);
     }
 
     @Override
@@ -66,7 +59,6 @@ public class FocusRecyclerView extends RecyclerView {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             resetValue();
         } else {
-            isActionDown = false;
             return true;
         }
         int layoutDirection = getCurrentLayoutDirection();
@@ -79,7 +71,6 @@ public class FocusRecyclerView extends RecyclerView {
         if (focusView != null) {
             switch (event.getKeyCode()) {
                 case KeyEvent.KEYCODE_DPAD_DOWN:
-                    keyEventDown = true;
                     View downView = FocusFinder.getInstance().findNextFocus(this, focusView, View.FOCUS_DOWN);
                     if (layoutDirection == OrientationHelper.HORIZONTAL || (isFocusOutAble && downView == null && isRecyclerViewToBottom())) {
                         break;
@@ -98,13 +89,11 @@ public class FocusRecyclerView extends RecyclerView {
                         }
                     }
                 case KeyEvent.KEYCODE_DPAD_UP:
-                    keyEventUp = true;
                     View upView = FocusFinder.getInstance().findNextFocus(this, focusView, View.FOCUS_UP);
                     if (layoutDirection == OrientationHelper.HORIZONTAL || (upView == null && isRecyclerViewToTop())) {
                         break;
                     }
                     if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                        isActionDown = true;
                         if (upView != null) {
                             upView.requestFocusFromTouch();
                             upView.requestFocus();
@@ -118,7 +107,6 @@ public class FocusRecyclerView extends RecyclerView {
                         }
                     }
                 case KeyEvent.KEYCODE_DPAD_RIGHT:
-                    keyEventRight = true;
                     View rightView = FocusFinder.getInstance().findNextFocus(this, focusView, View.FOCUS_RIGHT);
                     if (layoutDirection == OrientationHelper.VERTICAL || (isFocusOutAble && rightView == null && isRecyclerViewToRight())) {
                         break;
@@ -137,7 +125,6 @@ public class FocusRecyclerView extends RecyclerView {
                         }
                     }
                 case KeyEvent.KEYCODE_DPAD_LEFT:
-                    keyEventLeft = true;
                     View leftView = FocusFinder.getInstance().findNextFocus(this, focusView, View.FOCUS_LEFT);
                     if (layoutDirection == OrientationHelper.VERTICAL || (leftView == null && isRecyclerViewToLeft())) {
                         break;
@@ -162,12 +149,6 @@ public class FocusRecyclerView extends RecyclerView {
     }
 
     private void resetValue() {
-        keyEventDown = false;
-        keyEventUp = false;
-        keyEventLeft = false;
-        keyEventRight = false;
-        isActionDown = true;
-
         needGetDownView = false;
         needGetUpView = false;
         needGetLeftView = false;
@@ -180,35 +161,31 @@ public class FocusRecyclerView extends RecyclerView {
 
         final View focusView = getFocusedChild();
         if (focusView != null) {
-            if ((dx > 0 && keyEventRight && isMoving && isActionDown) || (needGetRightView)) {
+            if (needGetRightView) {
                 View rightView = FocusFinder.getInstance().findNextFocus(this, focusView, View.FOCUS_RIGHT);
                 if (rightView != null) {
-                    needGetLeftView = false;
                     needGetRightView = false;
                     rightView.requestFocusFromTouch();
                     rightView.requestFocus();
                 }
-            } else if ((dx < 0 && keyEventLeft && isMoving && isActionDown) || needGetLeftView) {
+            } else if (needGetLeftView) {
                 View leftView = FocusFinder.getInstance().findNextFocus(this, focusView, View.FOCUS_LEFT);
                 if (leftView != null) {
                     needGetLeftView = false;
-                    needGetRightView = false;
                     leftView.requestFocusFromTouch();
                     leftView.requestFocus();
                 }
-            } else if ((dy > 0 && keyEventDown && isMoving && isActionDown) || (needGetDownView)) {
+            } else if (needGetDownView) {
                 View downView = FocusFinder.getInstance().findNextFocus(this, focusView, View.FOCUS_DOWN);
                 if (downView != null) {
-                    needGetUpView = false;
                     needGetDownView = false;
                     downView.requestFocusFromTouch();
                     downView.requestFocus();
                 }
-            } else if ((dy < 0 && keyEventUp && isMoving && isActionDown) || needGetUpView) {
+            } else if (needGetUpView) {
                 View upView = FocusFinder.getInstance().findNextFocus(this, focusView, View.FOCUS_UP);
                 if (upView != null) {
                     needGetUpView = false;
-                    needGetDownView = false;
                     upView.requestFocusFromTouch();
                     upView.requestFocus();
                 }
