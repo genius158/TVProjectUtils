@@ -14,11 +14,13 @@ public class NavMovieHolder extends RecyclerView.ViewHolder {
     public MarqueeText tvTitle;
     public View pflContainer;
 
-    public NavMovieHolder(View itemView ) {
+    public NavMovieHolder(View itemView) {
         super(itemView);
         ivPoster = (SimpleDraweeView) itemView.findViewById(R.id.iv_poster);
-        tvTitle = (MarqueeText) itemView.findViewById(R.id.tv_movie_nav);
-        pflContainer =  itemView.findViewById(R.id.pfl_container);
+        if (itemView.findViewById(R.id.tv_movie_nav) != null) {
+            tvTitle = (MarqueeText) itemView.findViewById(R.id.tv_movie_nav);
+            pflContainer = itemView.findViewById(R.id.pfl_container);
+        }
     }
 
 }

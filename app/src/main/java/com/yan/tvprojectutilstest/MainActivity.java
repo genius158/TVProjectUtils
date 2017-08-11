@@ -45,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
         addData();
 
         final FocusRecyclerView rvData2 = (FocusRecyclerView) findViewById(R.id.rv_data2);
+        rvData2.setFocusFrontAble(true);
+
         GridLayoutManager focusGridLayoutManager2 = new GridLayoutManager(getApplicationContext(), 3);
         focusGridLayoutManager2.setOrientation(GridLayoutManager.HORIZONTAL);
         rvData2.setLayoutManager(focusGridLayoutManager2);
@@ -62,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
 
         addData2();
 
-
         findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
                 rvData2.setVisibility(View.GONE);
             }
         });
-
     }
 
     private void addData() {

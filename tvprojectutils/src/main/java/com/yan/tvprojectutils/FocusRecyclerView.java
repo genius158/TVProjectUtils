@@ -34,7 +34,7 @@ public class FocusRecyclerView extends RecyclerView {
     private boolean needGetRightView;
 
     /**
-     * isAbleFocusOut = true
+     * isFocusOutAble = true
      * <p>
      * what is the effect ?
      * <p>
@@ -42,14 +42,14 @@ public class FocusRecyclerView extends RecyclerView {
      * when the recyclerView scroll to end that the focus could be out of recyclerView
      * just effect the direction that load more able to trigger
      */
-    private boolean isAbleFocusOut = true;
+    private boolean isFocusOutAble = true;
 
     public FocusRecyclerView(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public FocusRecyclerView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, -1);
     }
 
     public FocusRecyclerView(Context context, AttributeSet attrs, int defStyle) {
@@ -69,7 +69,6 @@ public class FocusRecyclerView extends RecyclerView {
             isActionDown = false;
             return true;
         }
-
         int layoutDirection = getCurrentLayoutDirection();
 
         LayoutParams layoutParams = (LayoutParams) this.getChildAt(0).getLayoutParams();
@@ -82,7 +81,7 @@ public class FocusRecyclerView extends RecyclerView {
                 case KeyEvent.KEYCODE_DPAD_DOWN:
                     keyEventDown = true;
                     View downView = FocusFinder.getInstance().findNextFocus(this, focusView, View.FOCUS_DOWN);
-                    if (layoutDirection == OrientationHelper.HORIZONTAL || (isAbleFocusOut && downView == null && isRecyclerViewToBottom())) {
+                    if (layoutDirection == OrientationHelper.HORIZONTAL || (isFocusOutAble && downView == null && isRecyclerViewToBottom())) {
                         break;
                     }
                     if (event.getAction() == KeyEvent.ACTION_DOWN) {
@@ -121,7 +120,7 @@ public class FocusRecyclerView extends RecyclerView {
                 case KeyEvent.KEYCODE_DPAD_RIGHT:
                     keyEventRight = true;
                     View rightView = FocusFinder.getInstance().findNextFocus(this, focusView, View.FOCUS_RIGHT);
-                    if (layoutDirection == OrientationHelper.VERTICAL || (isAbleFocusOut && rightView == null && isRecyclerViewToRight())) {
+                    if (layoutDirection == OrientationHelper.VERTICAL || (isFocusOutAble && rightView == null && isRecyclerViewToRight())) {
                         break;
                     }
                     if (event.getAction() == KeyEvent.ACTION_DOWN) {
@@ -217,8 +216,27 @@ public class FocusRecyclerView extends RecyclerView {
         }
     }
 
-    public void setAbleFocusOut(boolean ableFocusOut) {
-        isAbleFocusOut = ableFocusOut;
+    @Override
+    protected int getChildDrawingOrder(int childCount, int i) {
+        final int tempFocusIndex = indexOfChild(getFocusedChild());
+        if (tempFocusIndex == -1) {
+            return i;
+        }
+        if (tempFocusIndex == i) {
+            return childCount - 1;
+        } else if (i == childCount - 1) {
+            return tempFocusIndex;
+        } else {
+            return i;
+        }
+    }
+
+    public void setFocusOutAble(boolean focusOutAble) {
+        isFocusOutAble = focusOutAble;
+    }
+
+    public void setFocusFrontAble(boolean focusFront) {
+        setChildrenDrawingOrderEnabled(focusFront);
     }
 
     private int getCurrentLayoutDirection() {
