@@ -56,13 +56,19 @@ public class FocusRecyclerView extends RecyclerView {
         } else {
             return super.dispatchKeyEvent(event);
         }
-        int layoutDirection = getCurrentLayoutDirection();
+
+        if (this.getChildAt(0) == null) {
+            return super.dispatchKeyEvent(event);
+        }
 
         LayoutParams layoutParams = (LayoutParams) this.getChildAt(0).getLayoutParams();
         int offsetY = this.getChildAt(0).getHeight() + layoutParams.topMargin + layoutParams.bottomMargin;
         int offsetX = this.getChildAt(0).getWidth() + layoutParams.leftMargin + layoutParams.rightMargin;
 
         View focusView = this.getFocusedChild();
+
+        int layoutDirection = getCurrentLayoutDirection();
+
         if (focusView != null) {
             switch (event.getKeyCode()) {
                 case KeyEvent.KEYCODE_DPAD_DOWN:
