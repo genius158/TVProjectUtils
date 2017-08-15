@@ -54,7 +54,7 @@ public class FocusRecyclerView extends RecyclerView {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             resetValue();
         } else {
-            return true;
+            return super.dispatchKeyEvent(event);
         }
         int layoutDirection = getCurrentLayoutDirection();
 
@@ -141,6 +141,7 @@ public class FocusRecyclerView extends RecyclerView {
         }
 
         return super.dispatchKeyEvent(event);
+
     }
 
     private void resetValue() {

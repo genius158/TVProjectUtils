@@ -5,8 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/TVProjectUtils.iml" filepath="$PROJECT_DIR$/TVProjectUtils.iml" />
       <module fileurl="file://$PROJECT_DIR$/TVProjectUtilsTest.iml" filepath="$PROJECT_DIR$/TVProjectUtilsTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/tvprojectutils/tvprojectutils.iml" filepath="$PROJECT_DIR$/tvprojectutils/tvprojectutils.iml" />
       <module fileurl="file://$PROJECT_DIR$/tvprojectutils/tvprojectutils.iml" filepath="$PROJECT_DIR$/tvprojectutils/tvprojectutils.iml" />
     </modules>
   </component>

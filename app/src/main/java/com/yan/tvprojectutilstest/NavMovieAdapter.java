@@ -8,6 +8,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.yan.tvprojectutils.MarqueeText;
 
@@ -35,7 +36,12 @@ public class NavMovieAdapter extends RecyclerView.Adapter<NavMovieHolder> {
     @Override
     public void onBindViewHolder(NavMovieHolder holder, int position) {
         holder.ivPoster.setImageURI(Uri.parse("res:// /" + R.drawable.bg));
-
+        holder.pflContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "you just touched me", Toast.LENGTH_LONG).show();
+            }
+        });
         holder.tvTitle.setText(stringList.get(position));
         holder.pflContainer.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override

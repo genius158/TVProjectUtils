@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -31,6 +32,12 @@ public class NavMovieAdapter2 extends RecyclerView.Adapter<NavMovieHolder> {
     @Override
     public void onBindViewHolder(NavMovieHolder holder, int position) {
         holder.ivPoster.setImageURI(Uri.parse("res:// /" + R.drawable.bg));
+        holder.ivPoster.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "you just touched me", Toast.LENGTH_LONG).show();
+            }
+        });
         holder.ivPoster.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
