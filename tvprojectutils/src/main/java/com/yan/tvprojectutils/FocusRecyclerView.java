@@ -9,10 +9,8 @@ import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.FocusFinder;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 
 import java.lang.reflect.Field;
