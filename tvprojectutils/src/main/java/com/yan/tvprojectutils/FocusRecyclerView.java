@@ -145,9 +145,7 @@ public class FocusRecyclerView extends RecyclerView {
                     }
             }
         }
-
         return super.dispatchKeyEvent(event);
-
     }
 
     private void resetValue() {
