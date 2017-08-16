@@ -74,72 +74,64 @@ public class FocusRecyclerView extends RecyclerView {
                     if (layoutDirection == OrientationHelper.HORIZONTAL || (isFocusOutAble && downView == null && isRecyclerViewToBottom())) {
                         break;
                     }
-                    if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                        if (downView != null) {
-                            downView.requestFocusFromTouch();
-                            downView.requestFocus();
-                            return true;
-                        } else {
-                            if (!isRecyclerViewToBottom()) {
-                                needGetDownView = true;
-                            }
-                            this.smoothScrollBy(0, offsetY);
-                            return true;
+                    if (downView != null) {
+                        downView.requestFocusFromTouch();
+                        downView.requestFocus();
+                        return true;
+                    } else {
+                        if (!isRecyclerViewToBottom()) {
+                            needGetDownView = true;
                         }
+                        this.smoothScrollBy(0, offsetY);
+                        return true;
                     }
                 case KeyEvent.KEYCODE_DPAD_UP:
                     View upView = FocusFinder.getInstance().findNextFocus(this, focusView, View.FOCUS_UP);
                     if (layoutDirection == OrientationHelper.HORIZONTAL || (upView == null && isRecyclerViewToTop())) {
                         break;
                     }
-                    if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                        if (upView != null) {
-                            upView.requestFocusFromTouch();
-                            upView.requestFocus();
-                            return true;
-                        } else {
-                            if (!isRecyclerViewToTop()) {
-                                needGetUpView = true;
-                            }
-                            this.smoothScrollBy(0, -offsetY);
-                            return true;
+                    if (upView != null) {
+                        upView.requestFocusFromTouch();
+                        upView.requestFocus();
+                        return true;
+                    } else {
+                        if (!isRecyclerViewToTop()) {
+                            needGetUpView = true;
                         }
+                        this.smoothScrollBy(0, -offsetY);
+                        return true;
                     }
                 case KeyEvent.KEYCODE_DPAD_RIGHT:
                     View rightView = FocusFinder.getInstance().findNextFocus(this, focusView, View.FOCUS_RIGHT);
                     if (layoutDirection == OrientationHelper.VERTICAL || (isFocusOutAble && rightView == null && isRecyclerViewToRight())) {
                         break;
                     }
-                    if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                        if (rightView != null) {
-                            rightView.requestFocusFromTouch();
-                            rightView.requestFocus();
-                            return true;
-                        } else {
-                            if (!isRecyclerViewToRight()) {
-                                needGetRightView = true;
-                            }
-                            this.smoothScrollBy(offsetX, 0);
-                            return true;
+                    if (rightView != null) {
+                        rightView.requestFocusFromTouch();
+                        rightView.requestFocus();
+                        return true;
+                    } else {
+                        if (!isRecyclerViewToRight()) {
+                            needGetRightView = true;
                         }
+                        this.smoothScrollBy(offsetX, 0);
+                        return true;
                     }
                 case KeyEvent.KEYCODE_DPAD_LEFT:
                     View leftView = FocusFinder.getInstance().findNextFocus(this, focusView, View.FOCUS_LEFT);
                     if (layoutDirection == OrientationHelper.VERTICAL || (leftView == null && isRecyclerViewToLeft())) {
                         break;
                     }
-                    if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                        if (leftView != null) {
-                            leftView.requestFocusFromTouch();
-                            leftView.requestFocus();
-                            return true;
-                        } else {
-                            if (!isRecyclerViewToLeft()) {
-                                needGetLeftView = true;
-                            }
-                            this.smoothScrollBy(-offsetX, 0);
-                            return true;
+                    if (leftView != null) {
+                        leftView.requestFocusFromTouch();
+                        leftView.requestFocus();
+                        return true;
+                    } else {
+                        if (!isRecyclerViewToLeft()) {
+                            needGetLeftView = true;
                         }
+                        this.smoothScrollBy(-offsetX, 0);
+                        return true;
                     }
             }
         }
